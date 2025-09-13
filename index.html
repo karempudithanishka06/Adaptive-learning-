@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Code Prompt — Adaptive Learning Platform</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#6ee7b7;
+      --glass: rgba(255,255,255,0.04);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071025 0%,#0b1530 60%);
+      color:#e6eef6;
+      padding:24px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      gap:20px;
+      min-height:100vh;
+    }
+
+    .wrap{
+      width:1100px;
+      max-width:calc(100% - 48px);
+      display:grid;
+      grid-template-columns:420px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    /* prompt card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:20px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+    .title{
+      font-weight:700;
+      font-size:18px;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+    .prompt {
+      background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(255,255,255,0.02));
+      padding:14px;
+      border-radius:10px;
+      font-size:15px;
+      line-height:1.45;
+      color: #e9f0f6;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+    }
+    .muted { color: var(--muted); font-size:13px; margin-top:10px; }
+
+    /* editor + controls */
+    .editorWrap{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:420px;
+    }
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    button{
+      background:var(--glass);
+      color:var(--accent);
+      border:1px solid rgba(255,255,255,0.04);
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+    }
+    button.primary{
+      background: linear-gradient(90deg,#05263a, #0b2b3f);
+      color:#c8fff0;
+      border:1px solid rgba(110,231,183,0.14);
+    }
+    button:active{transform:translateY(1px)}
+    .editor{
+      display:flex;
+      gap:12px;
+      height:calc(100% - 46px);
+      min-height:320px;
+    }
+    textarea{
+      flex:1;
+      resize:none;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.03);
+      background: #031020;
+      color:#dff7ee;
+      padding:14px;
+      font-family: var(--mono);
+      font-size:13px;
+      line-height:1.4;
+      min-height:320px;
+      outline:none;
+    }
+    .preview{
+      width:48%;
+      min-width:260px;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 6px 20px rgba(2,6,23,0.5);
+      background: #fff;
+    }
+    .preview iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    .footer {
+      margin-top:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* responsive */
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr; width:100%;}
+      .editor{flex-direction:column}
+      .preview{width:100%; min-height:240px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main">
+    <div class="card" aria-labelledby="promptTitle">
+      <div class="title" id="promptTitle">
+        <span class="dot" aria-hidden="true"></span>
+        Problem 2: Adaptive Learning Platform
+      </div>
+
+      <div class="prompt" id="promptText">
+Create a personalized study system with document processing, automated assessment generation, progress analytics, and AI-driven study recommendations. Deliver a web platform with file processing and analytics tools.
+      </div>
+
+      <div class="muted">Tip: edit the right-side code to prototype a simple web page or snippet that demonstrates the idea above.</div>
+    </div>
+
+    <div class="card editorWrap" aria-label="Code editor and preview">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">Live Code Editor</div>
+        <div class="controls" role="toolbar" aria-label="editor controls">
+          <button id="copyBtn">Copy</button>
+          <button id="downloadBtn">Download</button>
+          <button id="runBtn" class="primary">Run ▶</button>
+        </div>
+      </div>
+
+      <div class="editor" aria-live="polite">
+        <textarea id="code" spellcheck="false" aria-label="Code editor">
+// Example HTML prototype for the Adaptive Learning Platform dashboard
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Adaptive Learning Demo</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;margin:18px;color:#122;}
+      .header{display:flex;justify-content:space-between;align-items:center}
+      .card{background:#fff;padding:14px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+      .grid{display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px}
+      .progress{height:10px;background:#f1f1f1;border-radius:999px;overflow:hidden}
+      .progress > span{display:block;height:100%;background:linear-gradient(90deg,#4ade80,#06b6d4);width:62%}
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h2>Adaptive Learning — Demo</h2>
+      <small>Prototype</small>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h3>Student Overview</h3>
+          <p>Personalized recommendations, recent activity, and documents processed.</p>
+          <div style="margin-top:10px">
+            <strong>Weekly progress</strong>
+            <div class="progress" aria-label="weekly progress">
+              <span></span>
+            </div>
+            <p><small>62% of weekly study goal completed</small></p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>Auto-generated assessment</h3>
+          <p>Sample quiz created from uploaded document: <em>Chapter 3 - Algorithms</em></p>
+          <ol>
+            <li>What is the time complexity of binary search?</li>
+            <li>Explain divide-and-conquer in one sentence.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h4>AI Recommendations</h4>
+          <ul>
+            <li>Watch: "Binary Search - Visual Intuition" (15m)</li>
+            <li>Practice: 10 adaptive flashcards</li>
+            <li>Read: Summary of Chapter 3</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Upload / Process</h4>
+          <p>Upload a PDF to extract highlights & auto-generate quizzes.</p>
+          <button disabled>Upload (demo)</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+        </textarea>
+
+        <div class="preview" title="Preview panel">
+          <iframe id="preview" sandbox="allow-scripts"></iframe>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Preview uses a sandboxed iframe. JS is allowed inside the iframe only.</div>
+        <div id="status">Ready</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const codeEl = document.getElementById('code');
+    const preview = document.getElementById('preview');
+    const runBtn = document.getElementById('runBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const status = document.getElementById('status');
+
+    function runPreview(){
+      const html = codeEl.value;
+      preview.srcdoc = html;
+      status.textContent = 'Preview updated';
+      setTimeout(()=> status.textContent = 'Ready', 1500);
+    }
+
+    runBtn.addEventListener('click', runPreview);
+
+    copyBtn.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(codeEl.value);
+        status.textContent = 'Code copied to clipboard';
+        setTimeout(()=> status.textContent = 'Ready', 1400);
+      }catch(e){
+        status.textContent = 'Copy failed (browser blocked)';
+        setTimeout(()=> status.textContent = 'Ready', 2000);
+      }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const blob = new Blob([codeEl.value], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'adaptive-demo.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      status.textContent = 'Downloaded file adaptive-demo.html';
+      setTimeout(()=> status.textContent = 'Ready', 1400);
+    });
+
+    // keyboard shortcut: Ctrl/Cmd+Enter to run
+    codeEl.addEventListener('keydown', (e)=>{
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+        e.preventDefault();
+        runPreview();
+      }
+    });
+
+    // run initial preview
+    runPreview();
+  </script>
+</body>
+</html>
